@@ -1,0 +1,241 @@
+from flask import Flask, render_template_string
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+
+    avatar = "https://pin.it/4OiRhg8xX"
+    name = "Тимурхон"
+    username = "Timurxon"
+
+    return render_template_string(f"""
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{name}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ================= BASE ================= */
+:root {{
+    --bg:#000;
+    --text:#fff;
+    --card:rgba(255,255,255,0.06);
+    --border:rgba(255,255,255,0.12);
+    --accent:#0a84ff;
+    --shadow:rgba(10,132,255,0.4);
+}}
+
+body.light {{
+    --bg:#f5f5f7;
+    --text:#000;
+    --card:rgba(0,0,0,0.05);
+    --border:rgba(0,0,0,0.12);
+    --shadow:rgba(0,0,0,0.2);
+}}
+
+* {{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter;
+    transition:0.25s ease;
+}}
+
+body {{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:var(--bg);
+    color:var(--text);
+    overflow:hidden;
+}}
+
+/* ================= BACKGROUND ================= */
+.bg {{
+    position:absolute;
+    width:250%;
+    height:250%;
+    background:
+        radial-gradient(circle at 20% 20%, #0a84ff55, transparent 40%),
+        radial-gradient(circle at 80% 80%, #ff2d5555, transparent 45%),
+        radial-gradient(circle at 50% 50%, #34c75933, transparent 60%);
+    filter:blur(90px);
+    animation:move 10s infinite;
+}}
+
+@keyframes move {{
+    0%{{transform:translate(0,0)}}
+    50%{{transform:translate(-8%,-8%)}}
+    100%{{transform:translate(0,0)}}
+}}
+
+/* ================= SWITCH ================= */
+.switch {{
+    position:absolute;
+    top:20px;
+    right:20px;
+    padding:10px 14px;
+    border-radius:12px;
+    background:var(--card);
+    border:1px solid var(--border);
+    cursor:pointer;
+}}
+
+/* ================= CARD ================= */
+.card {{
+    width:92%;
+    max-width:420px;
+    padding:40px 25px;
+    border-radius:28px;
+    background:var(--card);
+    border:1px solid var(--border);
+    backdrop-filter:blur(25px);
+    text-align:center;
+    animation:pop 0.6s ease;
+}}
+
+@keyframes pop {{
+    from{{transform:scale(0.85);opacity:0}}
+    to{{transform:scale(1);opacity:1}}
+}}
+
+/* ================= AVATAR ================= */
+.avatar {{
+    width:95px;
+    height:95px;
+    border-radius:50%;
+    object-fit:cover;
+    border:1px solid rgba(255,255,255,0.2);
+}}
+
+/* ================= TEXT ================= */
+.name {{
+    font-size:22px;
+    font-weight:700;
+    margin-top:10px;
+}}
+
+.badge {{
+    display:inline-block;
+    width:14px;
+    height:14px;
+    background:#1da1f2;
+    border-radius:50%;
+    margin-left:6px;
+}}
+
+.handle {{
+    opacity:0.7;
+    font-size:14px;
+    margin-top:5px;
+}}
+
+.text {{
+    margin-top:15px;
+    font-size:14px;
+    opacity:0.75;
+}}
+
+/* ================= BUTTON ================= */
+.btn {{
+    margin-top:25px;
+    width:100%;
+    padding:18px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#0a84ff,#5e5ce6);
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 0 40px var(--shadow);
+}}
+
+.btn:hover {{
+    transform:scale(1.04);
+}}
+
+.btn:active {{
+    transform:scale(0.96);
+}}
+
+/* ripple */
+.ripple {{
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:rgba(255,255,255,0.4);
+    border-radius:50%;
+    transform:scale(0);
+    animation:ripple 0.6s linear;
+}}
+
+@keyframes ripple {{
+    to {{
+        transform:scale(10);
+        opacity:0;
+    }}
+}}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="switch" onclick="toggleTheme()">🌗 Mode</div>
+
+<div class="card">
+
+    <img class="avatar" src="{avatar}"/>
+
+    <div class="name">{name} <span class="badge"></span></div>
+
+    <div class="handle">@{username}</div>
+
+    <div class="text">
+        Premium Apple-style UI engine with glass + gradient animation.
+    </div>
+
+    <button class="btn" onclick="go(event)">
+        Telegramga kirish
+    </button>
+
+</div>
+
+<script>
+
+/* THEME */
+function toggleTheme(){{
+    document.body.classList.toggle("light");
+}}
+
+/* TELEGRAM + RIPPLE */
+function go(e){{
+    let ripple = document.createElement("span");
+    ripple.classList.add("ripple");
+    e.target.appendChild(ripple);
+
+    setTimeout(() => {{
+        window.location.href = "https://t.me/{username}";
+    }}, 300);
+}}
+
+</script>
+
+</body>
+</html>
+""")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
